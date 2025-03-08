@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>微信小程序预览 - 员工管理系统</title>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif;
+            background-color: #f5f7fa;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background-color: #409EFF;
+            color: white;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .header h2 {
+            margin: 0;
+        }
+        .preview-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+        }
+        .phone-frame {
+            width: 320px;
+            height: 640px;
+            background-color: #fff;
+            border-radius: 30px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 30px;
+        }
+        .phone-header {
+            height: 40px;
+            background-color: #000;
+            position: relative;
+        }
+        .phone-notch {
+            width: 150px;
+            height: 20px;
+            background-color: #000;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+        .phone-screen {
+            height: 560px;
+            overflow: hidden;
+        }
+        .phone-footer {
+            height: 40px;
+            background-color: #f8f8f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .home-indicator {
+            width: 100px;
+            height: 5px;
+            background-color: #ccc;
+            border-radius: 3px;
+        }
+        .screen-content {
+            height: 100%;
+            overflow: hidden;
+        }
+        .wx-navbar {
+            height: 44px;
+            background-color: #409EFF;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .wx-back {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 12px;
+        }
+        .wx-content {
+            height: calc(100% - 44px);
+            background-color: #f5f7fa;
+            overflow: auto;
+        }
+        .login-container {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 20px;
+        }
+        .login-logo {
+            width: 80px;
+            height: 80px;
+            background-color: #409EFF;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 40px;
+        }
+        .login-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #409EFF;
+            margin-bottom: 5px;
+        }
+        .login-subtitle {
+            font-size: 14px;
+            color: #909399;
+            margin-bottom: 30px;
+        }
+        .login-form {
+            width: 100%;
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+        }
+        .form-item {
+            margin-bottom: 15px;
+        }
+        .form-label {
+            display: block;
+            font-size: 14px;
+            color: #606266;
+            margin-bottom: 5px;
+        }
+        .form-input {
+            width: 100%;
+            height: 40px;
+            border: 1px solid #dcdfe6;
+            border-radius: 4px;
+            padding: 0 10px;
+            box-sizing: border-box;
+        }
+        .login-btn {
+            width: 100%;
+            height: 40px;
+            background-color: #409EFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        .wx-login-btn {
+            width: 100%;
+            height: 40px;
+            background-color: #07c160;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .login-footer {
+            margin-top: 30px;
+            font-size: 12px;
+            color: #909399;
+            text-align: center;
+        }
+        .home-container {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background-color: white;
+            margin-bottom: 10px;
+        }
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 25px;
+            background-color: #e6f1fc;
+            margin-right: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #409EFF;
+            font-size: 24px;
+        }
+        .user-detail {
+            display: flex;
+            flex-direction: column;
+        }
+        .username {
+            font-size: 16px;
+            font-weight: bold;
+            color: #303133;
+        }
+        .role {
+            font-size: 12px;
+            color: #909399;
+        }
+        .stats-container {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .stats-card {
+            width: 30%;
+            background-color: white;
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.05);
+        }
+        .stats-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #409EFF;
+            margin-bottom: 5px;
+        }
+        .stats-label {
+            font-size: 12px;
+            color: #909399;
+        }
+        .section {
+            background-color: white;
+            border-radius: 8px;
+            margin: 0 10px 10px 10px;
+            padding: 15px;
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .section-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #303133;
+        }
+        .section-more {
+            font-size: 12px;
+            color: #409EFF;
+        }
+        .employee-list {
+            display: flex;
+            flex-direction: column;
+        }
+        .employee-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #ebeef5;
+        }
+        .employee-item:last-child {
+            border-bottom: none;
+        }
+        .employee-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
+            background-color: #e6f1fc;
+            margin-right: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #409EFF;
+            font-size: 20px;
+        }
+        .employee-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .employee-name {
+            font-size: 14px;
+            font-weight: bold;
+            color: #303133;
+        }
+        .employee-position {
+            font-size: 12px;
+            color: #909399;
+        }
+        .employee-contact {
+            font-size: 12px;
+            color: #606266;
+        }
+        .tabbar {
+            height: 50px;
+            background-color: white;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 1px solid #ebeef5;
+        }
+        .tab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 10px;
+            color: #909399;
+        }
+        .tab-item.active {
+            color: #409EFF;
+        }
+        .tab-icon {
+            font-size: 18px;
+            margin-bottom: 2px;
+        }
+        .description {
+            margin-top: 20px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.05);
+        }
+        .description h3 {
+            margin-top: 0;
+            color: #409EFF;
+        }
+        .description ul {
+            padding-left: 20px;
+        }
+        .description li {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>微信小程序预览 - 员工管理系统</h2>
+        </div>
+        
+        <div class="preview-container">
+            <!-- 登录页面 -->
+            <div>
+                <div class="phone-frame">
+                    <div class="phone-header">
+                        <div class="phone-notch"></div>
+                    </div>
+                    <div class="phone-screen">
+                        <div class="screen-content">
+                            <div class="wx-navbar">
+                                <div class="wx-back">返回</div>
+                                员工管理系统
+                            </div>
+                            <div class="wx-content">
+                                <div class="login-container">
+                                    <div class="login-logo">E</div>
+                                    <div class="login-title">员工管理系统</div>
+                                    <div class="login-subtitle">请登录您的账号</div>
+                                    
+                                    <div class="login-form">
+                                        <div class="form-item">
+                                            <div class="form-label">用户名</div>
+                                            <input class="form-input" placeholder="请输入用户名" />
+                                        </div>
+                                        <div class="form-item">
+                                            <div class="form-label">密码</div>
+                                            <input class="form-input" type="password" placeholder="请输入密码" />
+                                        </div>
+                                        
+                                        <button class="login-btn">登录</button>
+                                        <button class="wx-login-btn">微信一键登录</button>
+                                    </div>
+                                    
+                                    <div class="login-footer">
+                                        © 2023 员工管理系统
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="phone-footer">
+                        <div class="home-indicator"></div>
+                    </div>
+                </div>
+                <div class="description">
+                    <h3>登录页面</h3>
+                    <ul>
+                        <li>支持账号密码登录</li>
+                        <li>支持微信一键登录</li>
+                        <li>美观的UI设计，包括logo、标题和表单</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- 首页 -->
+            <div>
+                <div class="phone-frame">
+                    <div class="phone-header">
+                        <div class="phone-notch"></div>
+                    </div>
+                    <div class="phone-screen">
+                        <div class="screen-content">
+                            <div class="wx-navbar">
+                                员工管理系统
+                            </div>
+                            <div class="wx-content">
+                                <div class="home-container">
+                                    <div class="user-info">
+                                        <div class="avatar">A</div>
+                                        <div class="user-detail">
+                                            <div class="username">Admin</div>
+                                            <div class="role">管理员</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="stats-container">
+                                        <div class="stats-card">
+                                            <div class="stats-value">24</div>
+                                            <div class="stats-label">员工总数</div>
+                                        </div>
+                                        <div class="stats-card">
+                                            <div class="stats-value">5</div>
+                                            <div class="stats-label">部门数量</div>
+                                        </div>
+                                        <div class="stats-card">
+                                            <div class="stats-value">12

@@ -1,0 +1,26 @@
+<!-- pages/login/login.wxml -->
+<view class="login-container">
+  <view class="login-header">
+    <image class="logo" src="/images/logo.png" mode="aspectFit"></image>
+    <text class="title">员工管理系统</text>
+    <text class="subtitle">请登录您的账号</text>
+  </view>
+  
+  <view class="login-form">
+    <view class="form-item">
+      <text class="form-label">用户名</text>
+      <input class="form-input" placeholder="请输入用户名" bindinput="inputUsername" value="{{username}}"/>
+    </view>
+    <view class="form-item">
+      <text class="form-label">密码</text>
+      <input class="form-input" password="true" placeholder="请输入密码" bindinput="inputPassword" value="{{password}}"/>
+    </view>
+    
+    <button class="login-btn" type="primary" bindtap="login" loading="{{loading}}">登录</button>
+    <button class="wx-login-btn" bindtap="wxLogin">微信一键登录</button>
+  </view>
+  
+  <view class="login-footer">
+    <text>© 2023 员工管理系统</text>
+  </view>
+</view>

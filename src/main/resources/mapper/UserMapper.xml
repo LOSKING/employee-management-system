@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.emp.mapper.UserMapper">
+    <!-- 结果映射 -->
+    <resultMap id="BaseResultMap" type="com.example.emp.entity.User">
+        <id column="id" property="id" />
+        <result column="username" property="username" />
+        <result column="password" property="password" />
+        <result column="role" property="role" />
+        <result column="employee_id" property="employeeId" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+    
+    <!-- 根据用户名查询用户 -->
+    <select id="selectByUsername" resultMap="BaseResultMap">
+        SELECT u.*, e.name as employee_name
+        FROM user u
+        LEFT JOIN employee e ON u.employee_id = e.id
+        WHERE u.username = #{username}
+    </select>
+    
+    <!-- 新增用户 -->
+    <insert id="insert" parameterType="com.example.emp.entity.User" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO user (
+            username, password, role, employee_id
+        ) VALUES (
+            #{username}, #{password}, #{role}, #{employeeId}
+        )
+    </insert>
+    
+    <!-- 更新用户 -->
+    <update id="update" parameterType="com.example.emp.entity.User">
+        UPDATE user
+        <set>
+            <if test="username != null">username = #{username},</if>
+            <if test="password != null">password = #{password},</if>
+            <if test="role != null">role = #{role},</if>
+            <if test="employeeId != null">employee_id = #{employeeId},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 删除用户 -->
+    <delete id="deleteById">
+        DELETE FROM user WHERE id = #{id}
+    </delete>
+</mapper>

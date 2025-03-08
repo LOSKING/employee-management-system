@@ -1,0 +1,61 @@
+<!-- pages/index/index.wxml -->
+<view class="container">
+  <!-- 头部信息 -->
+  <view class="header">
+    <view class="user-info" wx:if="{{userInfo}}">
+      <image class="avatar" src="{{userInfo.avatar || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+      <view class="user-detail">
+        <text class="username">{{userInfo.username}}</text>
+        <text class="role">{{userInfo.role === 'ADMIN' ? '管理员' : '员工'}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 统计卡片 -->
+  <view class="stats-container">
+    <view class="stats-card" bindtap="navigateToEmployees">
+      <view class="stats-value">{{statistics.totalEmployees}}</view>
+      <view class="stats-label">员工总数</view>
+    </view>
+    <view class="stats-card" bindtap="navigateToDepartments">
+      <view class="stats-value">{{statistics.departments}}</view>
+      <view class="stats-label">部门数量</view>
+    </view>
+    <view class="stats-card" bindtap="navigateToPositions">
+      <view class="stats-value">{{statistics.positions}}</view>
+      <view class="stats-label">职位数量</view>
+    </view>
+  </view>
+
+  <!-- 最近添加的员工 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">最近添加的员工</text>
+      <text class="section-more" bindtap="navigateToEmployees">查看全部</text>
+    </view>
+    
+    <view class="employee-list" wx:if="{{recentEmployees.length > 0}}">
+      <view class="employee-item" wx:for="{{recentEmployees}}" wx:key="id" bindtap="viewEmployee" data-id="{{item.id}}">
+        <image class="employee-avatar" src="{{item.avatar || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+        <view class="employee-info">
+          <text class="employee-name">{{item.name}}</text>
+          <text class="employee-position">{{item.departmentName}} - {{item.positionName}}</text>
+        </view>
+        <view class="employee-contact">
+          <text class="employee-phone">{{item.phone}}</text>
+        </view>
+      </view>
+    </view>
+    
+    <view class="empty-data" wx:else>
+      <image class="empty-icon" src="/images/empty.png" mode="aspectFit"></image>
+      <text>暂无员工数据</text>
+    </view>
+  </view>
+
+  <!-- 加载中 -->
+  <view class="loading" wx:if="{{loading}}">
+    <view class="loading-spinner"></view>
+    <text>加载中...</text>
+  </view>
+</view>
