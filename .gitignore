@@ -1,0 +1,33 @@
+# Maven生成的文件
+target/
+*.jar
+*.war
+*.ear
+*.class
+
+# IDE配置文件
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+.classpath
+.project
+.settings/
+
+# 日志文件
+logs/
+*.log
+
+# 操作系统生成的文件
+.DS_Store
+Thumbs.db
+
+# 本地配置文件
+application-local.yml
+application-local.properties
+
+# 其他不需要版本控制的文件
+node_modules/
+npm-debug.log
+yarn-error.log
